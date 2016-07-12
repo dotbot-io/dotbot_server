@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from celery import Celery
+from flask_restful import Api
 
 
 def make_celery(app):
@@ -23,5 +24,6 @@ def create_app():
     return app, celery
 
 app, celery = create_app()
+api = Api(app)
 
 from . import views

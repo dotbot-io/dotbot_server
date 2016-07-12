@@ -2,6 +2,7 @@ from . import app
 
 from subprocess import call
 from celery.contrib.methods import task_method
+import celery
 
 import tasks
 
@@ -15,7 +16,7 @@ class Master:
 
     def kill(self):
         if self._process is not None:
-            self._process.revoke(terminate=True)
+            celery.control.revoke(self._process.id, terminate=True, signal='SIGINT')
 
 class Node:
     def __init__(self, package, node):
