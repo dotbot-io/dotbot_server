@@ -10,17 +10,29 @@ def index():
     return 'DotBot Main Page!'
 
 
+master = Master()
+node = Node('turtlesim', 'turtlesim_node')
 
 class RosMaster(Resource):
-    def __init__(self):
-        self.master = Master()
     def post(self):
-        self.master.run()
+        master.run()
         return {'response': 'ok'}
 
     def delete(self):
-        self.master.kill()
+        master.kill()
         return {'response': 'ok'}
 
 
+class RosNode(Resource):
+    def post(self):
+        node.run()
+        return {'response': 'ok'}
+
+    def delete(self):
+        node.kill()
+        return {'response': 'ok'}
+
+
+
 api.add_resource(RosMaster, '/roscore')
+api.add_resource(RosNode, '/turtlesim')

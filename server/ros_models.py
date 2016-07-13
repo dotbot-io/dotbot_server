@@ -10,13 +10,17 @@ import tasks
 class Master:
     def __init__(self):
         self._process = None
+        print 'created'
 
     def run(self):
-        self._process = tasks.roscore.apply_async()
+        print self._process
+        self._process = tasks.roscore.delay()
 
     def kill(self):
+        print self._process
         if self._process is not None:
-            celery.control.revoke(self._process.id, terminate=True, signal='SIGINT')
+            print "terminating"
+            self._process.abort()
 
 class Node:
     def __init__(self, package, node):
@@ -25,8 +29,11 @@ class Node:
         self._node = node
 
     def run(self):
-        self._process = tasks.rosrun.apply_async([self._package, self._node])
+        self._process = tasks.rosrun.delay(self._package, self._node)
+        print self._process
 
     def kill(self):
+        print self._process
         if self._process is not None:
-            self._process.revoke(terminate=True)
+            print "terminating"
+            self._process.abort()
