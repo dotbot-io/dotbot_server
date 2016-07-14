@@ -37,3 +37,19 @@ class Node:
         if self._process is not None:
             print "terminating"
             self._process.abort()
+
+class Launch:
+    def __init__(self, package, launchfile):
+        self._process = None
+        self._package = package
+        self._launchfile = launchfile
+
+    def run(self):
+        self._process = tasks.roslaunch.delay(self._package, self._launchfile)
+        print self._process
+
+    def kill(self):
+        print self._process
+        if self._process is not None:
+            print "terminating"
+            self._process.abort()
